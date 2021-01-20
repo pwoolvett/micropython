@@ -38,6 +38,11 @@
 #include "hardware/structs/iobank0.h"
 #include "hardware/structs/padsbank0.h"
 
+#define GPIO_MODE_IN (0)
+#define GPIO_MODE_OUT (1)
+#define GPIO_MODE_OPEN_DRAIN (2)
+#define GPIO_MODE_ALT (3)
+
 // These can be or'd together.
 #define GPIO_PULL_UP (1)
 #define GPIO_PULL_DOWN (2)
@@ -176,13 +181,19 @@ STATIC mp_obj_t machine_pin_obj_init_helper(const machine_pin_obj_t *self, size_
     // configure mode
     if (args[ARG_mode].u_obj != mp_const_none) {
         mp_int_t mode = mp_obj_get_int(args[ARG_mode].u_obj);
-        if (mode == 2) {
+        if (mode == GPIO_MODE_ALT) {
             // Alternate function.
             gpio_set_function(self->id, args[ARG_alt].u_int);
         } else {
             // Normal GPIO function.
             gpio_set_function(self->id, GPIO_FUNC_SIO);
-            gpio_set_dir(self->id, mode);
+            int dir;
+            if (mode == GPIO_MODE_IN || mode == GPIO_MODE_OPEN_DRAIN) {
+                dir = GPIO_IN;
+            } else {
+                dir = GPIO_OUT;
+            }
+            gpio_set_dir(self->id, dir);
         }
     }
 
@@ -325,9 +336,10 @@ STATIC const mp_rom_map_elem_t machine_pin_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_irq), MP_ROM_PTR(&machine_pin_irq_obj) },
 
     // class constants
-    { MP_ROM_QSTR(MP_QSTR_IN), MP_ROM_INT(0) },
-    { MP_ROM_QSTR(MP_QSTR_OUT), MP_ROM_INT(1) },
-    { MP_ROM_QSTR(MP_QSTR_ALT), MP_ROM_INT(2) },
+    { MP_ROM_QSTR(MP_QSTR_IN), MP_ROM_INT(GPIO_MODE_IN) },
+    { MP_ROM_QSTR(MP_QSTR_OUT), MP_ROM_INT(GPIO_MODE_OUT) },
+    { MP_ROM_QSTR(MP_QSTR_OPEN_DRAIN), MP_ROM_INT(GPIO_MODE_OPEN_DRAIN) },
+    { MP_ROM_QSTR(MP_QSTR_ALT), MP_ROM_INT(GPIO_MODE_ALT) },
     { MP_ROM_QSTR(MP_QSTR_PULL_UP), MP_ROM_INT(GPIO_PULL_UP) },
     { MP_ROM_QSTR(MP_QSTR_PULL_DOWN), MP_ROM_INT(GPIO_PULL_DOWN) },
     { MP_ROM_QSTR(MP_QSTR_IRQ_RISING), MP_ROM_INT(GPIO_IRQ_EDGE_RISE) },
