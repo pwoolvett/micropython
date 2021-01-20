@@ -8,6 +8,7 @@ set(SOURCE_EXTMOD
     ${MPY_DIR}/extmod/machine_spi.c
     ${MPY_DIR}/extmod/modbtree.c
     ${MPY_DIR}/extmod/modframebuf.c
+    ${MPY_DIR}/extmod/modonewire.c
     ${MPY_DIR}/extmod/moduasyncio.c
     ${MPY_DIR}/extmod/modubinascii.c
     ${MPY_DIR}/extmod/moducryptolib.c
