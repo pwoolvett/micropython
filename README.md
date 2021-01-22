@@ -1,5 +1,11 @@
 [![CI badge](https://github.com/micropython/micropython/workflows/unix%20port/badge.svg)](https://github.com/micropython/micropython/actions?query=branch%3Amaster+event%3Apush) [![Coverage badge](https://coveralls.io/repos/micropython/micropython/badge.png?branch=master)](https://coveralls.io/r/micropython/micropython?branch=master)
 
+<details><summary>FORK-FORK info</summary>
+
+* Added docker image to build RP2040
+
+</details>
+
 The MicroPython project
 =======================
 <p align="center">
